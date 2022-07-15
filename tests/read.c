@@ -8,19 +8,19 @@ int main () {
     
     kuli_t k = {.map = map, .data = data};
 
-    byte_t buf[1024];
+    char buf[1024];
     kuli_entry_t entry = {
         .size = sizeof(buf),
         .data = buf,
     };
 
-    while (!feof(map)) {
-        kuli.this(k, &entry, sizeof(buf)-1);
+    while (1) {
+        kuli.read(k, &entry, sizeof(buf)-1);
+        if (feof(map)) break; // it's up to the user to test if th eof was reached
         entry.data[entry.size] = 0; // 0 terminate string
         printf("char[%d]: \"%s\"\n", entry.size, entry.data);
     }
-    // last entry should be printed twice
-
+    
     fclose(data);
     fclose(map);
 
